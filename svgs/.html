@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cool Neon Register</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(-45deg, #7006fc, #7bff00, #7c6d76, #ad1b1b);
+        background-size: 400% 400%;
+        animation: gradientBG 7s ease infinite;
+        overflow: hidden;
+      }
+      @keyframes gradientBG {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+      .floating-shape {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+        animation: float 10s infinite ease-in-out;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-30px);
+        }
+      }
+      .container {
+        background: rgba(255, 255, 255, 0.08);
+        padding: 30px;
+        border-radius: 20px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+        width: 350px;
+        transition: transform 0.3s ease;
+      }
+      .container:hover {
+        transform: rotateX(5deg) rotateY(-5deg);
+      }
+      h2 {
+        color: #fff;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      input {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 8px;
+        outline: none;
+        background: rgba(255, 255, 255, 0.2);
+        color: #2f13e4;
+        font-size: 14px;
+      }
+      input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .password-toggle {
+        position: relative;
+      }
+      .password-toggle i {
+        position: absolute;
+        right: 10px;
+        top: 35%;
+        cursor: pointer;
+        color: #fff;
+      }
+      button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        background: #00d4ff;
+        color: #000;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s ease;
+      }
+      button:hover {
+        background: #00ff94;
+      }
+      .otp-btn {
+        background: #ff0099;
+        margin-bottom: 10px;
+      }
+      .otp-btn:disabled {
+        background: gray;
+        cursor: not-allowed;
+      }
+      .music-btn {
+        background: #6a00f4;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="floating-shape"
+      style="width: 100px; height: 100px; top: 10%; left: 10%"
+    ></div>
+    <div
+      class="floating-shape"
+      style="width: 150px; height: 150px; bottom: 15%; right: 15%"
+    ></div>
+
+    <div class="container">
+      <h2>Register</h2>
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="text" id="username" placeholder="Username" required />
+      <input
+        type="tel"
+        id="phone"
+        placeholder="Phone (+254, 07, 01)"
+        required
+      />
+      <input type="text" id="otp" placeholder="Enter OTP here" />
+      <button type="button" class="otp-btn" onclick="sendOTP()" id="sendOtpBtn">
+        Send OTP
+      </button>
+      <div class="password-toggle">
+        <input
+          type="password"
+          id="password"
+          placeholder="Password (min 6)"
+          required
+        />
+        <i onclick="togglePassword('password', this)">👁</i>
+      </div>
+      <div class="password-toggle">
+        <input
+          type="password"
+          id="confirmPassword"
+          placeholder="Confirm Password"
+          required
+        />
+        <i onclick="togglePassword('confirmPassword', this)">👁</i>
+      </div>
+      <button onclick="register()">Register</button>
+      <button class="music-btn" onclick="toggleMusic()">
+        🎵 Play/Stop Music
+      </button>
+    </div>
+
+    <audio id="bgMusic" loop>
+      <source
+        src="Russ Millions x Tion Wayne  Body Music Video  GRM Daily.mp3"
+        type="audio/mpeg"
+      />
+    </audio>
+
+    <script>
+      let countdown;
+      function sendOTP() {
+        const phone = document.getElementById("phone").value.trim();
+        const valid = /^(?:\+254|07|01)\d{8}$/.test(phone);
+        if (!valid) {
+          alert("Enter a valid phone number");
+          return;
+        }
+        const btn = document.getElementById("sendOtpBtn");
+        btn.disabled = true;
+        let timeLeft = 60;
+        btn.textContent = `Resend OTP in ${timeLeft}s`;
+        countdown = setInterval(() => {
+          timeLeft--;
+          btn.textContent = `Resend OTP in ${timeLeft}s`;
+          if (timeLeft <= 0) {
+            clearInterval(countdown);
+            btn.textContent = "Send OTP";
+            btn.disabled = false;
+          }
+        }, 1000);
+        alert("OTP Sent: 123456 (Demo)");
+      }
+      function togglePassword(id, el) {
+        const input = document.getElementById(id);
+        if (input.type === "password") {
+          input.type = "text";
+          el.textContent = "🙈";
+        } else {
+          input.type = "password";
+          el.textContent = "👁";
+        }
+      }
+      function register() {
+        const pass = document.getElementById("password").value;
+        const confirmPass = document.getElementById("confirmPassword").value;
+        if (pass.length < 6) {
+          alert("Password must be at least 6 characters");
+          return;
+        }
+        if (pass !== confirmPass) {
+          alert("Passwords do not match");
+          return;
+        }
+        alert("Registered Successfully✔!");
+      }
+      function toggleMusic() {
+        const music = document.getElementById("bgMusic");
+        if (music.paused) {
+          music.play();
+        } else {
+          music.pause();
+        }
+      }
+    </script>
+  </body>
+</html>
