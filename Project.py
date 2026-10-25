@@ -11,6 +11,12 @@ class Drink:
             else:
                 print("Not enough stock")
                 return None
+
+    def restock(self, quantity):
+           self.stock += quantity
+           print(f"{self.name} restocked. New stock: {self.stock}")
+           
+            
             
 shop = {
     "coke": Drink("Coke", 1250, 10),
@@ -35,7 +41,7 @@ while True:
     if result is not None:
            print(f"Total cost: {result}")
            with open ("sales_log.txt", "a") as file:
-                      file.write(f"Sold {quantity} {choice} for {result}\n")
+                      file.write(f"Sold {quantity} {choice} for {result}")
           
 
 
@@ -47,4 +53,3 @@ while True:
             
 
 
-        
